@@ -1,18 +1,14 @@
 
-import { blue } from "@mui/material/colors";
+import { useParams } from "react-router-dom"
+import { Typography, Box, Divider, TextField, Button, Stack, List } from "@mui/material";
 import React from "react";
-import ReactDOM from "react-dom";
-import { CardActions, IconButton, Paper, TextField, Box, Typography, Divider, List, InputAdornment, Grid, Card, CardMedia, CardContent, CardHeader, CardActionArea } from "@mui/material";
-import { Comment, Image, VolumeUp } from "@mui/icons-material";
-import { Search } from "@mui/icons-material";
-
+import { Person } from "@mui/icons-material";
 const contents = [{img: "/news-images/poachershunt.jpeg", 
                     title:"Poachers hunt with impunity", 
                     content: "The beautiful bird, which exists in millions, was captured by the poachers at night by playing the prerecorded quail sound on a tape recorder. Thus quail got netted. The poachers took them to the hotels in Thal where they sold this beautiful wild bird, he said."
                 },
-            {
-                img: "/news-images/birdmigration.jpg", 
-                title: "Intercepting the illegal capture of migratory birds in south-central West Bengal", 
+            {img: "/news-images/birdmigration.jpg", 
+            title: "Intercepting the illegal capture of migratory birds in south-central West Bengal", 
             content: "For several years, migratory birds are poached during their winter stop at wetlands (beel in Bengali) and open fields in the central-south Bengal districts of Murshidabad, Malda, Birbhum and Bardhaman. These wetlands and fields are covered with nets that turn into death traps. The trapped birds are illegally sold in the market as delicacies."
             ,author: "John Doe"
             },
@@ -42,67 +38,52 @@ const contents = [{img: "/news-images/poachershunt.jpeg",
             title: "Forest officials face pressure from politicians to go easy on possession of wildlife articles in Karnataka",
             content: "Forest Department officials are in a fix over the intervention of elected representatives in enforcing laws meant to protect wildlife with regard to possession of wildlife articles.            "
             ,author: "John Doe"
+
         }]
-const Item = ({...props}) => {
-    return (<Card elevation={6} sx={{display: 'flex', flexDirection: "column", ':hover': {
-        transform: "scale3d(1.01, 1.01, 1)"
-      }}} >
-        <CardActionArea href={props.id+""}>
-        <CardMedia
-        component="img"
-        height={props.big ? 400: 200}
-        image={process.env.PUBLIC_URL + contents[props.id]?.img}
-      />
-      
 
-    <CardContent>
-        <Typography variant="h4">{contents[props.id]?.title}</Typography>
-        <Typography variant="subtitle2">{contents[props.id]?.author}</Typography>
-      <Typography variant="body" sx={{
-        display: '-webkit-box',
-        overflow: 'hidden',
-        WebkitBoxOrient: 'vertical',
-        WebkitLineClamp: 3,
-    }}>{contents[props.id]?.content}</Typography>
-    </CardContent>
 
-    </CardActionArea>
-    <CardActions disableSpacing>
-        <IconButton>
-          <Comment/>
-        </IconButton>
-        <IconButton>
-          <VolumeUp/>
-        </IconButton>
-    </CardActions>
-    </Card>);
-  }
-const NewsPage = () => {
+
+
+
+const CommentEntry = ({...props}) => {
     return (
-    <Box sx={{padding:"2%"}}>
-        <Grid container spacing={4}>
-            <Grid item xs={12}>
-                <Item big={true} id={0}/>
-            </Grid>
-            <Grid item xs={4}>
-                <Item id={1}/>
-            </Grid>
-            <Grid item xs={4}>
-                <Item id={2}/>
-            </Grid>
-            <Grid item xs={4}>
-                <Item id={3}/>
-            </Grid>
-            <Grid item xs={4}>
-                <Item id={4}/>
-            </Grid>
-            <Grid item xs={4}>
-                <Item id={5}/>
-            </Grid>
-        </Grid>
-    </Box>
+        <Box width="100%">
+            <Divider/>
 
+            <Typography variant="subtitle2"><Person/>{props.comment?.author}</Typography>
+            <Typography variant="h6">{props.comment?.comment}</Typography>
+
+            <Divider />
+        </Box>
     );
 }
+const NewsSinglePage = () => {
+    let { id } = useParams();
+    const [comment, setComment] = React.useState("")
+    const [comments, setComments] = React.useState([])
+    const submitComment = () => {
+        setComments([...comments, {author: "kek", comment: comment}])
+    }
+    return (
+        <>
+        <Box marginLeft="5%" marginRight="40%">
+        <Typography variant="h3">{contents[id].title}</Typography>
+        <img src={contents[id].img} width="800px"/>
+        <Typography>{contents[id].content}</Typography>
+        </Box>
+        <Divider style={{width:"40%", marginBottom:"10px"}}/>
+        <Box  marginLeft="2%" marginRight="60%" marginBottom="20px">
+            <Typography variant="h4">Discussion</Typography>
+            <Divider style={{width:"20%", marginBottom:"10px"}}/>
+            <Typography variant="subtitle2">Enter your comment: </Typography>
+            <TextField fullWidth label="Description" placeholder="Enter your comment here (500 words)" multiline rows={10} value={comment} onChange={(evt) => {setComment(evt.target.value)}}/>
+            <Button onClick={submitComment}>Post</Button>
+                {comments.map(function(data) {
+                    return <CommentEntry comment={data}/>
+                })}
+        </Box>
+        </>
+    )
+}
 
-export default NewsPage;
+export default NewsSinglePage;

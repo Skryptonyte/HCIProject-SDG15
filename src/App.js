@@ -1,20 +1,35 @@
 import logo from './logo.svg';
 import './App.css';
-import { AppBar, Toolbar, IconButton, Typography, Button, Box, Menu, MenuItem, CssBaseline } from '@mui/material';
+import { AppBar, Toolbar, IconButton, Typography, Button, Box, Menu, MenuItem, CssBaseline, Divider } from '@mui/material';
 import MapPage from './pages/MapPage'
 import SearchPage from './pages/SearchPage'
 import NewsPage from './pages/NewsPage'
+import LoginPage from './pages/LoginPage'
+import NewsSinglePage from './pages/NewsSinglePage';
 import React from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Contrast, DarkMode, Person, Settings, SettingsAccessibility } from '@mui/icons-material';
+import { Cancel, Contrast, DarkMode, Map, Newspaper, Person, Settings, SettingsAccessibility } from '@mui/icons-material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import "@fontsource/dancing-script"
 import "@fontsource/rubik"
+import RegisterPage from './pages/RegisterPage';
 
 const App = () => {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const [dark, setDark] = React.useState(false);
+  const [dark, setDark] = React.useState(localStorage.getItem('dark') == "true" ? true: false);
 
+  
+  const setDarkMode = () => {
+    if (dark){
+      localStorage.setItem('dark',"false")
+      setDark(false)
+    }
+    else {
+      localStorage.setItem('dark',"true")
+
+      setDark(true)
+    }
+  }
   const handleOpenMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -37,14 +52,16 @@ const App = () => {
       <CssBaseline />
 <AppBar position="static">
   <Toolbar variant="dense">
-    <Typography variant="h6" color="inherit" fontFamily="Dancing Script" fontSize={30} component="div">
+    <Typography variant="h6" color="inherit" fontFamily="Dancing Script" fontSize={30} component="div" marginRight="20px">
       PoachThePoachers
     </Typography>
     <Box sx={{flexGrow: 1}}>
-    <Button color="inherit" href="/news">News</Button>
-    <Button color="inherit" href="/map">Map</Button>
-    <Button color="inherit" href="/search" sx={{flexGrow: 1}}>Blacklist</Button>
+    <Button color="inherit" href="/news"><Newspaper/> News</Button>
+    <Button color="inherit" href="/search" sx={{flexGrow: 1}}><Cancel/>Blacklist</Button>
+    <Button color="inherit" href="/map"><Map/>Career</Button>
+
     </Box>
+
       <Box>
         <IconButton
                   size="large"
@@ -69,11 +86,12 @@ const App = () => {
               onClose={handleCloseMenu}
             >
 
-                <MenuItem onClick={()=>{dark ? setDark(false): setDark(true)}}>
+                <MenuItem onClick={setDarkMode}>
                   <DarkMode sx={{flexGrow: 1}}/>
                   <Typography textAlign="center">Set Dark Mode: {dark ? 'On': 'Off'}</Typography>
                 </MenuItem>
             </Menu>
+            <Button color="inherit" href="/login">Login</Button>
       </Box>
   </Toolbar>
 </AppBar>
@@ -83,6 +101,9 @@ const App = () => {
           <Route path="/map" element={<MapPage />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/news" element={<NewsPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/news/:id" element={<NewsSinglePage />} />
       </Routes>
    </BrowserRouter>
    </ThemeProvider> 
