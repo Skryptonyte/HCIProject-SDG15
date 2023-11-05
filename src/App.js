@@ -7,6 +7,7 @@ import NewsPage from './pages/NewsPage'
 import LoginPage from './pages/LoginPage'
 import NewsSinglePage from './pages/NewsSinglePage';
 import React from 'react';
+import ThanksPage from './pages/ThanksPage'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Cancel, Contrast, DarkMode, Map, Newspaper, Person, Settings, SettingsAccessibility } from '@mui/icons-material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -50,7 +51,7 @@ const App = () => {
     <>
     <ThemeProvider theme={theme}>
       <CssBaseline />
-<AppBar position="static">
+<AppBar position="fixed">
   <Toolbar variant="dense">
     <Typography variant="h6" color="inherit" fontFamily="Dancing Script" fontSize={30} component="div" marginRight="20px">
       PoachThePoachers
@@ -104,6 +105,8 @@ const App = () => {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/news/:id" element={<NewsSinglePage />} />
+          <Route path="/thanks" element={<ThanksPage />} />
+
       </Routes>
    </BrowserRouter>
    </ThemeProvider> 
