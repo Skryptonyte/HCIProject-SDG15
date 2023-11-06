@@ -1,8 +1,9 @@
-import { Paper, TextField, Button, Box, Typography, Link } from "@mui/material"
+import { Paper, TextField, Button, Box, Typography, Link, Tooltip } from "@mui/material"
 import Stack from '@mui/material/Stack';
 import React from "react";
 import "@fontsource/dancing-script"
 import "@fontsource/rubik"
+import { QuestionMark } from "@mui/icons-material";
 
 const RegisterPage = () => {
     const formRef = React.useRef();
@@ -45,7 +46,7 @@ const RegisterPage = () => {
                 <Box sx={{display: 'flex' ,width: "100%"}}>
                     <Typography variant="h3" sx={{justifyContent: true, flex: 1, textAlign: "center"}}>Register new account</Typography>
                 </Box>
-                <Box sx={{display: 'flex' ,width: "100%"}}>
+                <Box sx={{display: 'flex' ,width: "100%", flexDirection: "horizontal", alignItems: "center"}}>
                     <TextField sx={{justifyContent: true, flex: 1, marginY: "10px"}}
                         label="Username" type="text" helperText={emailHelper} error={emailHelper != ""} 
                         value={email}
@@ -53,8 +54,11 @@ const RegisterPage = () => {
                             setEmailHelper("")
                             setEmail(event.target.value);
                           }}/>
+                          <Tooltip title="Username must be alphanumeric. Do not use your real name here." >
+                            <QuestionMark fontSize="small"/>
+                          </Tooltip>
                 </Box>
-                <Box sx={{display: 'flex' ,width: "100%"}}>
+                <Box sx={{display: 'flex' ,width: "100%", flexDirection: "horizontal", alignItems: "center"}}>
                     <TextField sx={{justifyContent: true, flex: 1, marginY: "10px"}}
                         label="Password" type="password" helperText={passwordHelper} error={passwordHelper != ""}
                         value={password}
@@ -62,8 +66,11 @@ const RegisterPage = () => {
                             setPasswordHelper("")
                             setPassword(event.target.value);
                           }}/>
+                          <Tooltip title="Password must be 8 or more characters" >
+                            <QuestionMark fontSize="small"/>
+                          </Tooltip>
                 </Box>
-                <Box sx={{display: 'flex' ,width: "100%"}}>
+                <Box sx={{display: 'flex' ,width: "100%", flexDirection: "horizontal", alignItems: "center"}}>
                     <TextField sx={{justifyContent: true, flex: 1, marginY: "10px"}}
                         label="Confirm Password" type="password" helperText={confirmPasswordHelper} error={confirmPasswordHelper != ""}
                         value={confirmPassword}
@@ -71,6 +78,9 @@ const RegisterPage = () => {
                             setConfirmPasswordHelper("")
                             setConfirmPassword(event.target.value);
                           }}/>
+                          <Tooltip title="Passwords must match!" >
+                            <QuestionMark fontSize="small"/>
+                          </Tooltip>
                 </Box>
                 <Box sx={{display: 'flex' ,width: "100%"}}>
                     <Button onClick={onSubmit} sx={{justifyContent: true, flex: 1, marginY: "10px", marginX: "15%"}}>Register</Button>

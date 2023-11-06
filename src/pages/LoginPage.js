@@ -1,11 +1,11 @@
 
-import { Paper, TextField, Button, Box, Typography, Link } from "@mui/material"
+import { Paper, TextField, Button, Box, Typography, Link, Tooltip } from "@mui/material"
 import Stack from '@mui/material/Stack';
 import React from "react";
 import "@fontsource/dancing-script"
 import "@fontsource/rubik"
 import { useNavigate } from "react-router-dom";
-
+import { QuestionMark } from "@mui/icons-material";
 const LoginPage = () => {
     const formRef = React.useRef();
     const [email, setEmail] = React.useState("")
@@ -27,7 +27,15 @@ const LoginPage = () => {
         if (!pass){
             return
         }
-        navigate("/")
+
+        if (!(email == "test@test.com" && password == "testtest"))
+        {
+            setPasswordHelper("Incorrect username or password!")
+            return
+        }
+        localStorage.setItem("login","Test User")
+        navigate("/news")
+        navigate(0)
         return 
     }
     return (
@@ -49,7 +57,7 @@ const LoginPage = () => {
                             setEmail(event.target.value);
                           }}/>
                 </Box>
-                <Box sx={{display: 'flex' ,width: "100%"}}>
+                <Box sx={{display: 'flex' ,width: "100%", flexDirection: "horizontal", alignItems: "center"}}>
                     <TextField sx={{justifyContent: true, flex: 1, marginY: "10px"}}
                         label="Password" type="password" helperText={passwordHelper} error={passwordHelper != ""}
                         value={password}
@@ -57,6 +65,9 @@ const LoginPage = () => {
                             setPasswordHelper("")
                             setPassword(event.target.value);
                           }}/>
+                          <Tooltip title="Never share your password with anybody!" >
+                            <QuestionMark fontSize="small"/>
+                          </Tooltip>
                 </Box>
                 <Box sx={{display: 'flex' ,width: "100%"}}>
                     <Button onClick={onSubmit} sx={{justifyContent: true, flex: 1, marginY: "10px", marginX: "15%"}}>Login</Button>

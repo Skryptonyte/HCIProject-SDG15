@@ -49,7 +49,7 @@ const Item = ({...props}) => {
     return (<Card elevation={6} sx={{display: 'flex', flexDirection: "column", ':hover': {
         transform: "scale3d(1.01, 1.01, 1)"
       }}} >
-        <CardActionArea href={props.id+""}>
+        <CardActionArea href={"/news/"+props.id+""}>
         <CardMedia
         component="img"
         height={props.big ? 400: 200}

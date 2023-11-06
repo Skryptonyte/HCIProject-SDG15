@@ -2,7 +2,7 @@
 import { useParams } from "react-router-dom"
 import { Typography, Box, Divider, TextField, Button, Stack, List } from "@mui/material";
 import React from "react";
-import { Person } from "@mui/icons-material";
+import { Person2Rounded } from "@mui/icons-material";
 const contents = [{id: 1,
                     img: "/news-images/poachershunt.jpeg", 
                     title:"Poachers hunt with impunity", 
@@ -55,7 +55,7 @@ const CommentEntry = ({...props}) => {
         <Box width="100%">
             <Divider/>
 
-            <Typography variant="subtitle2"><Person/>{props.comment?.author}</Typography>
+            <Typography variant="subtitle2"><Person2Rounded/>{props.comment?.author}</Typography>
             <Typography variant="h6">{props.comment?.comment}</Typography>
             <Button color="error" onClick={delFunc}>Delete</Button>
             <Divider />
@@ -67,7 +67,7 @@ const NewsSinglePage = () => {
     const [comment, setComment] = React.useState("")
     const [comments, setComments] = React.useState([])
     const submitComment = () => {
-        setComments([...comments, {id:comments.length+1, author: "kek", comment: comment}])
+        setComments([...comments, {id:comments.length+1, author: localStorage.getItem("login"), comment: comment}])
     }
     const deleteFunc = (id) => {
         setComments(current =>
@@ -88,9 +88,9 @@ const NewsSinglePage = () => {
             <Typography variant="h4">Discussion</Typography>
             <Divider style={{width:"20%", marginBottom:"10px"}}/>
             <Typography variant="subtitle2">Enter your comment: </Typography>
-            <TextField fullWidth label="Description" placeholder="Enter your comment here (100 words)" multiline rows={10} value={comment} onChange={(evt) => {setComment(evt.target.value)}}/>
+            <TextField fullWidth label="Description" placeholder="Enter your comment here" multiline rows={10} value={comment} onChange={(evt) => {setComment(evt.target.value)}}/>
             <Button onClick={submitComment}>Post</Button>
-                {comments.map(function(data) {
+                {comments.reverse().map(function(data) {
                     return <CommentEntry delete={deleteFunc} comment={data}/>
                 })}
         </Box>

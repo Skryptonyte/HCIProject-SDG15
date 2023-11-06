@@ -8,13 +8,15 @@ import LoginPage from './pages/LoginPage'
 import NewsSinglePage from './pages/NewsSinglePage';
 import React from 'react';
 import ThanksPage from './pages/ThanksPage'
+import IncidentList from './pages/IncidentList';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Cancel, Contrast, DarkMode, Map, Newspaper, Person, Settings, SettingsAccessibility } from '@mui/icons-material';
+import { Cancel, Contrast, DarkMode, Map, Newspaper, Person, Person2Rounded, Settings, SettingsAccessibility } from '@mui/icons-material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import "@fontsource/dancing-script"
 import "@fontsource/rubik"
 import RegisterPage from './pages/RegisterPage';
-
+import { useNavigate } from 'react-router-dom';
+import LogoutPage from './pages/LogoutPage';
 const App = () => {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [dark, setDark] = React.useState(localStorage.getItem('dark') == "true" ? true: false);
@@ -44,9 +46,8 @@ const App = () => {
     },
     typography: {
       fontFamily: 'Rubik',
-    }
+    },
   });
-  
   return (
     <>
     <ThemeProvider theme={theme}>
@@ -92,11 +93,14 @@ const App = () => {
                   <Typography textAlign="center">Set Dark Mode: {dark ? 'On': 'Off'}</Typography>
                 </MenuItem>
             </Menu>
-            <Button color="inherit" href="/login">Login</Button>
+            {!localStorage.getItem("login") && <Button color="inherit" href="/login">Login</Button>}
+            {localStorage.getItem("login")  && <Button color="inherit"><Person2Rounded/>{localStorage.getItem("login")}</Button>}
+
+            {localStorage.getItem("login")  && <Button color="inherit" href="/logout">Logout</Button>}
       </Box>
   </Toolbar>
 </AppBar>
-
+<Toolbar/>
 <BrowserRouter>
       <Routes>
           <Route path="/map" element={<MapPage />} />
@@ -106,6 +110,8 @@ const App = () => {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/news/:id" element={<NewsSinglePage />} />
           <Route path="/thanks" element={<ThanksPage />} />
+          <Route path="/logout" element={<LogoutPage />} />
+          <Route path="/incidents" element={<IncidentList />} />
 
       </Routes>
    </BrowserRouter>
