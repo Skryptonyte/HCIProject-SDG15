@@ -3,24 +3,33 @@ import Stack from '@mui/material/Stack';
 import React from "react";
 import "@fontsource/dancing-script"
 import "@fontsource/rubik"
-import { QuestionMark } from "@mui/icons-material";
-
+import { Help } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+import { green } from "@mui/material/colors";
 const RegisterPage = () => {
     const formRef = React.useRef();
     const [email, setEmail] = React.useState("")
     const [emailHelper, setEmailHelper] = React.useState("")
+
+    const [username, setUsername] = React.useState("")
+    const [usernameHelper, setUsernameHelper] = React.useState("")
 
     const [password, setPassword] = React.useState("")
     const [passwordHelper, setPasswordHelper] = React.useState("")
 
     const [confirmPassword, setConfirmPassword] = React.useState("")
     const [confirmPasswordHelper, setConfirmPasswordHelper] = React.useState("")
-
+    const navigate = useNavigate()
+    const [registerSuccess, setRegisterSuccess] = React.useState(false)
     const onSubmit = () => {
         // Fill pass
         var pass = 1
         if (email == ""){
             setEmailHelper("Please fill your email")
+            pass = 0
+        }
+        if (username == ""){
+            setUsernameHelper("Please fill your username")
             pass = 0
         }
         if (password == ""){
@@ -38,6 +47,11 @@ const RegisterPage = () => {
             setConfirmPasswordHelper("Passwords do not match!")
             return;
         }
+        setRegisterSuccess(true)
+        const timer = setTimeout(() => {
+            navigate("/login")
+            navigate(0)
+        }, 5000);
     }
     return (
         <Box>
@@ -48,14 +62,26 @@ const RegisterPage = () => {
                 </Box>
                 <Box sx={{display: 'flex' ,width: "100%", flexDirection: "horizontal", alignItems: "center"}}>
                     <TextField sx={{justifyContent: true, flex: 1, marginY: "10px"}}
-                        label="Username" type="text" helperText={emailHelper} error={emailHelper != ""} 
+                        label="Email" type="text" helperText={emailHelper} error={emailHelper != ""} 
                         value={email}
                         onChange={(event) => {
                             setEmailHelper("")
                             setEmail(event.target.value);
                           }}/>
+                          <Tooltip title="Email must be of format name@emailprovider.domain" >
+                            <Help fontSize="small"/>
+                          </Tooltip>
+                </Box>
+                <Box sx={{display: 'flex' ,width: "100%", flexDirection: "horizontal", alignItems: "center"}}>
+                    <TextField sx={{justifyContent: true, flex: 1, marginY: "10px"}}
+                        label="Username" type="text" helperText={usernameHelper} error={usernameHelper != ""} 
+                        value={username}
+                        onChange={(event) => {
+                            setUsernameHelper("")
+                            setUsername(event.target.value);
+                          }}/>
                           <Tooltip title="Username must be alphanumeric. Do not use your real name here." >
-                            <QuestionMark fontSize="small"/>
+                            <Help fontSize="small"/>
                           </Tooltip>
                 </Box>
                 <Box sx={{display: 'flex' ,width: "100%", flexDirection: "horizontal", alignItems: "center"}}>
@@ -67,7 +93,7 @@ const RegisterPage = () => {
                             setPassword(event.target.value);
                           }}/>
                           <Tooltip title="Password must be 8 or more characters" >
-                            <QuestionMark fontSize="small"/>
+                            <Help fontSize="small"/>
                           </Tooltip>
                 </Box>
                 <Box sx={{display: 'flex' ,width: "100%", flexDirection: "horizontal", alignItems: "center"}}>
@@ -79,12 +105,15 @@ const RegisterPage = () => {
                             setConfirmPassword(event.target.value);
                           }}/>
                           <Tooltip title="Passwords must match!" >
-                            <QuestionMark fontSize="small"/>
+                            <Help fontSize="small"/>
                           </Tooltip>
                 </Box>
                 <Box sx={{display: 'flex' ,width: "100%"}}>
                     <Button onClick={onSubmit} sx={{justifyContent: true, flex: 1, marginY: "10px", marginX: "15%"}}>Register</Button>
                 </Box>
+                {      registerSuccess &&         <Box sx={{display: 'flex' ,width: "100%", flexDirection: "horizontal", alignItems: "center"}}>
+                    <Typography sx={{color: green[500]}}variant="subtitle1">Registration succeeded! Returning to login!</Typography>
+                </Box>}
                 </form>
             </Paper>
         </Box>

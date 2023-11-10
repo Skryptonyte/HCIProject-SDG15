@@ -79,6 +79,12 @@ const Item = ({...props}) => {
 const NewsPage = () => {
     return (
     <Box sx={{padding:"2%"}}>
+        <Box sx={{display: 'flex' ,width: "100%"}}>
+            <Typography variant="h2" sx={{justifyContent: true, flex: 1, textAlign: "center", fontFamily: "Dancing Script"}}>PoachThePoachers</Typography>
+        </Box>
+        <Box sx={{display: 'flex' ,width: "100%"}}>
+            <Typography sx={{justifyContent: true, flex: 1, textAlign: "center"}}>We preserve all flora and fauna and protect it from illegal human activities.</Typography>
+        </Box>
         <Grid container spacing={4}>
             <Grid item xs={12}>
                 <Item big={true} id={0}/>

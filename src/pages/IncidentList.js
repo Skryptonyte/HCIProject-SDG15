@@ -17,9 +17,16 @@ const RowEle = ({...props}) => {
     const [openEdit, setOpenEdit] = React.useState(false);
     const handleOpenEdit = () => setOpenEdit(true);
     const handleCloseEdit = () => setOpenEdit(false);
+
+    const [openDel, setOpenDel] = React.useState(false);
+    const handleOpenDel = () => setOpenDel(true);
+    const handleCloseDel = () => setOpenDel(false);
+
     const [title, setTitle] = React.useState("")
     const [description, setDesc] = React.useState("")
-return ( <TableRow
+return ( 
+
+<TableRow
     key={props.row?.id}
     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
     >
@@ -35,7 +42,7 @@ return ( <TableRow
             setDesc(props.rows[props.id].description)
             handleOpenEdit()
         }}><Edit/></IconButton>
-        <IconButton onClick={() => {props.del(props.id)}}><Delete/></IconButton>
+        <IconButton onClick={() => {handleOpenDel()}}><Delete/></IconButton>
     </TableCell>
     <Modal
                 open={openEdit}
@@ -62,6 +69,21 @@ return ( <TableRow
                 </Box>
                 </Box>
         </Modal>
+        <Modal
+                open={openDel}
+                onClose={handleCloseDel}>
+                <Box sx={modalStyle}>
+                <Typography variant="h6">You are about to delete this incident. Are you sure?</Typography>
+                <Box>
+                    <Button onClick={handleCloseDel}>Back</Button>
+                    <Button onClick={()=>{
+                        props.del(props.id)
+                        handleCloseDel()
+                        }}>Submit</Button>
+
+                </Box>
+                </Box>
+        </Modal>
     </TableRow>)
 }
 const IncidentList = () => {
@@ -70,7 +92,7 @@ const IncidentList = () => {
     const handleClose = () => setOpen(false);
 
 
-    const [rows, setRows] = React.useState([{title: "man",description: "test"}])
+    const [rows, setRows] = React.useState([])
 
     const [title, setTitle] = React.useState("")
     const [description, setDesc] = React.useState("")
@@ -91,7 +113,7 @@ const IncidentList = () => {
         setRows(rows.map((row, index) => {
             if (index == i)
             {
-                return {title: title, description: desc}
+                return {title: title, description: desc, date: row.date}
             }
             else {
                 return row
@@ -100,6 +122,12 @@ const IncidentList = () => {
           )
     }
     return (<Box>
+ <      Box sx={{display: 'flex' ,width: "100%"}}>
+            <Typography variant="h3" sx={{justifyContent: true, flex: 1, textAlign: "center"}}>Your Incident Reports</Typography>
+        </Box>
+        <Box sx={{display: 'flex' ,width: "100%"}}>
+            <Typography sx={{justifyContent: true, flex: 1, textAlign: "center"}}>If you have spotted illegal activities in your vicinity, please file a report here to us!</Typography>
+        </Box>
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                 <TableHead>
@@ -120,7 +148,13 @@ const IncidentList = () => {
             </TableContainer>
             <Modal
                 open={open}
-                onClose={handleClose}>
+                onClose={handleClose}
+                onKeyPress= {(e) => {
+                    if (e.key === 'Enter') {
+                      submit()
+                      // write your functionality here
+                    }
+            }}>
                 <Box sx={modalStyle}>
                 <Typography variant="h3">Report incident</Typography>
                 <Box sx={{display: 'flex' ,width: "100%", flexDirection: "horizontal", alignItems: "center"}}>

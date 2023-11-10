@@ -3,10 +3,10 @@ import { blue } from "@mui/material/colors";
 import React from "react";
 import ReactDOM from "react-dom";
 import { ZoomableGroup, ComposableMap, Geographies, Geography } from "react-simple-maps";
-import { Button, IconButton, Paper, Typography, Box , CardActionArea, Card, CardMedia, CardContent, CardActions, Grid, Modal, TextField} from "@mui/material";
+import { Button, IconButton, Paper, Typography, Box , CardActionArea, Card, CardMedia, CardContent, CardActions, Grid, Modal, TextField, Tooltip} from "@mui/material";
 
 import { Marker } from "react-simple-maps"
-import { Circle, CircleSharp, Info, CloudUploadIcon } from "@mui/icons-material";
+import { Circle, CircleSharp, Info, CloudUploadIcon, Help } from "@mui/icons-material";
 import { styled } from '@mui/material/styles';
 import { useNavigate } from "react-router-dom";
 const VisuallyHiddenInput = styled('input')({
@@ -24,7 +24,10 @@ const VisuallyHiddenInput = styled('input')({
 const geoUrl =
   "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_50m_land.geojson";
 
-
+const helpContent = `To select your desired work location.
+1. The map shows markers which indicate available offices you can apply for.
+2. On clicking them, your location selected should turn green.
+3. You can simply click another marker to change your selected location `
   const modalStyle = {
     position: 'absolute',
     top: '50%',
@@ -44,8 +47,10 @@ const Item = ({...props}) => {
     const [fileName, setFileName] = React.useState("")
     return (<Card elevation={6} sx={{display: 'flex', flexDirection: "column", ':hover': {
         transform: "scale3d(1.01, 1.01, 1)"
-      }}} >
-        <CardActionArea onClick={()=>{handleOpen()}}>
+      },
+      borderBottom: 5, borderColor:props.profile == props.id? "blue": "black"
+      }} >
+        <CardActionArea onClick={()=>{props.setProfile(props.id)}}>
     <CardContent>
         <Typography variant="h4">{jobProfiles[props.id]?.title}</Typography>
         <Typography variant="h5">{jobProfiles[props.id]?.content}</Typography>
@@ -82,8 +87,17 @@ const jobProfiles = [
         - Maintain pipeline for adding news articles
         - Develop internal portals for employee use
     `},
-    {title: "Area Inspector", content: "Get hands-on experience in investigating illegal wildlife interference in our areas of operations"},
-    {title: "HR Manager", content: "Hire the best talents into our esteemed company"}
+    {title: "Area Inspector", 
+    content: "Get hands-on experience in investigating illegal wildlife interference in our areas of operations"},
+    {title: "HR Manager", content: "Hire the best talents into our esteemed company",
+    detail:   ` 
+        Experience:
+        - 5 years of management
+        Responsibilities:
+        - Manage recruiting drives
+        - Prepare job profiles for applicants
+        - Promote on linkedin
+    `}
 ]
 const MapPage = () => {
     const [email, setEmail] = React.useState("")
@@ -98,11 +112,16 @@ const MapPage = () => {
     const [loaded, setLoaded] = React.useState(false)
     const [file, setFile] = React.useState("")
 
-
+    const [profile, setProfile] = React.useState(-1)
     const [marker, setMarker] = React.useState(-1)
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+
+    const [openHelp, setOpenHelp] = React.useState(false);
+    const handleOpenHelp = () => setOpenHelp(true);
+    const handleCloseHelp = () => setOpenHelp(false);
+
     const navigate = useNavigate()
 
     const submit = () => {
@@ -112,7 +131,7 @@ const MapPage = () => {
     <>
     <div style={{padding: 100 }}>
 
-        <Typography variant="h2">1. Select location of operation</Typography>
+        <Typography variant="h2">1. Select location of operation <IconButton onClick={handleOpenHelp}><Help/></IconButton></Typography>
         <Paper>
         {!loaded && <Typography variant="h3">Loading map. Please wait</Typography>}
     <ComposableMap width={800} height={600} >
@@ -146,13 +165,13 @@ const MapPage = () => {
     <Box sx={{padding:"2%"}}>
         <Grid container spacing={4}>
             <Grid item xs={4}>
-                <Item big={true} id={0}/>
+                <Item id={0} setProfile={setProfile} profile={profile}/>
             </Grid>
             <Grid item xs={4}>
-                <Item id={1}/>
+                <Item id={1} setProfile={setProfile} profile={profile}/>
             </Grid>
             <Grid item xs={4}>
-                <Item id={2}/>
+                <Item id={2} setProfile={setProfile} profile={profile}/>
             </Grid>
 
         </Grid>
@@ -169,9 +188,12 @@ const MapPage = () => {
                     <TextField sx={{justifyContent: true, flex: 1, marginY: "10px"}}
                         label="Last name" type="text"/>
                 </Box>
-                <Box sx={{display: 'flex' ,width: "100%"}}>
+                <Box sx={{display: 'flex' ,width: "100%", flexDirection: "horizontal", alignItems: "center"}}>
                     <TextField sx={{justifyContent: true, flex: 1, marginY: "10px"}}
                         label="Phone Number" type="number"/>
+                        <Tooltip title="Format: +Country Code (9-10 digit number)">
+                            <Help/>
+                        </Tooltip>
                 </Box>
                 <Box sx={{display: 'flex' ,width: "100%"}}>
                     <TextField sx={{justifyContent: true, flex: 1, marginY: "10px"}}
@@ -180,10 +202,6 @@ const MapPage = () => {
                 <Box sx={{display: 'flex' ,width: "100%"}}>
                     <TextField sx={{justifyContent: true, flex: 1, marginY: "10px"}}
                         label="Email" type="text"/>
-                </Box>
-                <Box sx={{display: 'flex' ,width: "100%", flexDirection: "horizontal"}}>
-                    <TextField sx={{justifyContent: true, flex: 1, marginY: "10px"}}
-                        label="Confirm Password" type="password"/>
                 </Box>
                 <Box sx={{display: 'flex' ,width: "100%", flexDirection: "horizonal"}}>
                 <Button component="label" variant="contained">
@@ -216,6 +234,15 @@ const MapPage = () => {
                 <Button onClick={handleClose}>Back</Button>
                 <Button onClick={submit}>Submit</Button>
 
+                </Box>
+        </Modal>
+        <Modal
+                open={openHelp}
+                onClose={handleCloseHelp}
+                >
+                <Box sx={modalStyle}>
+                <Typography variant="h6">{helpContent}</Typography>
+                <Button onClick={handleCloseHelp}>Back</Button>
                 </Box>
         </Modal>
   </div>

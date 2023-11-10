@@ -1,8 +1,8 @@
 
 import { useParams } from "react-router-dom"
-import { Typography, Box, Divider, TextField, Button, Stack, List } from "@mui/material";
+import { Typography, Box, Divider, TextField, Button, Stack, List, Modal, IconButton } from "@mui/material";
 import React from "react";
-import { Person2Rounded } from "@mui/icons-material";
+import { ArrowBack, Person2Rounded } from "@mui/icons-material";
 const contents = [{id: 1,
                     img: "/news-images/poachershunt.jpeg", 
                     title:"Poachers hunt with impunity", 
@@ -44,21 +44,48 @@ const contents = [{id: 1,
         }]
 
 
-
+const modalStyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+    };
 
 const CommentEntry = ({...props}) => {
 
     const delFunc = () => {
         props.delete(props.comment.id)
     }
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
     return (
         <Box width="100%">
             <Divider/>
 
             <Typography variant="subtitle2"><Person2Rounded/>{props.comment?.author}</Typography>
             <Typography variant="h6">{props.comment?.comment}</Typography>
-            <Button color="error" onClick={delFunc}>Delete</Button>
+            <Button color="error" onClick={handleOpen}>Delete</Button>
             <Divider />
+            <Modal
+                open={open}
+                onClose={handleClose}>
+                <Box sx={modalStyle}>
+                <Typography variant="subtitle">Are you sure you want to delete this comment?</Typography>
+                <Box>
+                    <Button onClick={handleClose}>Back</Button>
+                    <Button onClick={()=>{
+                        delFunc()
+                        handleClose()}}>Delete</Button>
+
+                </Box>
+                </Box>
+        </Modal>
         </Box>
     );
 }
@@ -68,7 +95,10 @@ const NewsSinglePage = () => {
     const [comments, setComments] = React.useState([])
     const submitComment = () => {
         setComments([...comments, {id:comments.length+1, author: localStorage.getItem("login"), comment: comment}])
+        setComment("")
     }
+
+
     const deleteFunc = (id) => {
         setComments(current =>
             comments.filter((c) => {
@@ -79,21 +109,25 @@ const NewsSinglePage = () => {
     return (
         <>
         <Box marginLeft="5%" marginRight="40%">
+        <IconButton href="/"><Typography variant="h3"><ArrowBack/>Back</Typography></IconButton>
         <Typography variant="h3">{contents[id].title}</Typography>
         <img src={contents[id].img} width="800px"/>
         <Typography>{contents[id].content}</Typography>
         </Box>
         <Divider style={{width:"40%", marginBottom:"10px"}}/>
-        <Box  marginLeft="2%" marginRight="60%" marginBottom="20px">
+        <Box  marginLeft="2%" marginRight="60%" marginBottom="20px" >
             <Typography variant="h4">Discussion</Typography>
             <Divider style={{width:"20%", marginBottom:"10px"}}/>
             <Typography variant="subtitle2">Enter your comment: </Typography>
             <TextField fullWidth label="Description" placeholder="Enter your comment here" multiline rows={10} value={comment} onChange={(evt) => {setComment(evt.target.value)}}/>
             <Button onClick={submitComment}>Post</Button>
+            <Box sx={{display:'flex', flexDirection: "column-reverse"}}>
                 {comments.reverse().map(function(data) {
                     return <CommentEntry delete={deleteFunc} comment={data}/>
                 })}
+                </Box>
         </Box>
+
         </>
     )
 }

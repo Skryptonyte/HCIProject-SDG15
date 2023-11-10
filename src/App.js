@@ -10,7 +10,7 @@ import React from 'react';
 import ThanksPage from './pages/ThanksPage'
 import IncidentList from './pages/IncidentList';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Cancel, Contrast, DarkMode, Map, Newspaper, Person, Person2Rounded, Settings, SettingsAccessibility } from '@mui/icons-material';
+import { Cancel, Contrast, DarkMode, Map, Newspaper, Person, Person2Rounded, Settings, SettingsAccessibility, DocumentScannerRounded } from '@mui/icons-material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import "@fontsource/dancing-script"
 import "@fontsource/rubik"
@@ -58,7 +58,8 @@ const App = () => {
       PoachThePoachers
     </Typography>
     <Box sx={{flexGrow: 1}}>
-    <Button color="inherit" href="/news"><Newspaper/> News</Button>
+    <Button color="inherit" href="/"><Newspaper/> News</Button>
+    {localStorage.getItem("login")  && <Button color="inherit" href="/incidents"><DocumentScannerRounded/>Incidents</Button>}
     <Button color="inherit" href="/search" sx={{flexGrow: 1}}><Cancel/>Blacklist</Button>
     <Button color="inherit" href="/map"><Map/>Career</Button>
 
@@ -105,7 +106,7 @@ const App = () => {
       <Routes>
           <Route path="/map" element={<MapPage />} />
           <Route path="/search" element={<SearchPage />} />
-          <Route path="/news" element={<NewsPage />} />
+          <Route path="/" element={<NewsPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/news/:id" element={<NewsSinglePage />} />

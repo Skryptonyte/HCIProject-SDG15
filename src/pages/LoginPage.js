@@ -5,7 +5,7 @@ import React from "react";
 import "@fontsource/dancing-script"
 import "@fontsource/rubik"
 import { useNavigate } from "react-router-dom";
-import { QuestionMark } from "@mui/icons-material";
+import { QuestionMark, Help } from "@mui/icons-material";
 const LoginPage = () => {
     const formRef = React.useRef();
     const [email, setEmail] = React.useState("")
@@ -17,7 +17,7 @@ const LoginPage = () => {
     const onSubmit = () => {
         var pass = 1
         if (email == ""){
-            setEmailHelper("Please fill your email")
+            setEmailHelper("Please fill your user")
             pass = 0
         }
         if (password == ""){
@@ -28,18 +28,23 @@ const LoginPage = () => {
             return
         }
 
-        if (!(email == "test@test.com" && password == "testtest"))
+        if (!(email == "Test User" && password == "testtest"))
         {
             setPasswordHelper("Incorrect username or password!")
             return
         }
         localStorage.setItem("login","Test User")
-        navigate("/news")
+        navigate("/")
         navigate(0)
         return 
     }
     return (
-        <Box>
+        <Box onKeyPress= {(e) => {
+            if (e.key === 'Enter') {
+              onSubmit()
+              // write your functionality here
+            }
+    }} >
             <Paper sx={{marginX: "25%", marginY: "5%", paddingX: "4%", paddingY: "2%"}} elevation={10}>
                 <form>
             <Box sx={{display: 'flex' ,width: "100%"}}>
@@ -66,7 +71,7 @@ const LoginPage = () => {
                             setPassword(event.target.value);
                           }}/>
                           <Tooltip title="Never share your password with anybody!" >
-                            <QuestionMark fontSize="small"/>
+                            <Help fontSize="small"/>
                           </Tooltip>
                 </Box>
                 <Box sx={{display: 'flex' ,width: "100%"}}>
