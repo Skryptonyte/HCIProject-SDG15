@@ -46,6 +46,10 @@ const contents = [{img: "/news-images/poachershunt.jpeg",
             ,author: "John Doe"
         }]
 const Item = ({...props}) => {
+
+    const identifier = "comments-"+props.id
+    const commentData = localStorage.getItem(identifier)
+    const [comments, setComments] = React.useState(commentData ? JSON.parse(commentData): [])
     return (<Card elevation={6} sx={{display: 'flex', flexDirection: "column", ':hover': {
         transform: "scale3d(1.01, 1.01, 1)"
       }}} >
@@ -71,7 +75,7 @@ const Item = ({...props}) => {
     </CardActionArea>
     <CardActions disableSpacing>
         <Button>
-          <Comment/> {contents[props.id]?.comments}
+          <Comment/> {comments.length}
         </Button>
     </CardActions>
     </Card>);

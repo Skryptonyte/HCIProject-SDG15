@@ -91,26 +91,30 @@ const IncidentList = () => {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
-
-    const [rows, setRows] = React.useState([])
+    var userName = localStorage.getItem("user")
+    var identifier = "incidents-"+userName
+    var stored = localStorage.getItem(identifier)
+    const [rows, setRows] = React.useState(stored ? JSON.parse(stored):  [])
 
     const [title, setTitle] = React.useState("")
     const [description, setDesc] = React.useState("")
     const submit = () => {
+        localStorage.setItem(identifier, JSON.stringify([...rows, {title: title, description: description, date: (new Date()).toString()}]))
+        console.log(localStorage.getItem(identifier))
         setRows([...rows, {title: title, description: description, date: (new Date()).toString()}])
         setTitle("")
         setDesc("")
         handleClose()
     }
     const del = (i) => {
-        setRows(current =>
-                rows.filter((c, index) => {
-              return i !== index;
-            }),
-          )
+        const newRows =rows.filter((c, index) => {
+      return i !== index;
+    })
+        localStorage.setItem(identifier, JSON.stringify(newRows))
+        setRows(newRows)
     }
     const edit = (i, title, desc) => {
-        setRows(rows.map((row, index) => {
+        const newRows = rows.map((row, index) => {
             if (index == i)
             {
                 return {title: title, description: desc, date: row.date}
@@ -119,7 +123,8 @@ const IncidentList = () => {
                 return row
             }
         })
-          )
+        localStorage.setItem(identifier, JSON.stringify(newRows))
+        setRows(newRows)
     }
     return (<Box>
  <      Box sx={{display: 'flex' ,width: "100%"}}>
@@ -127,6 +132,9 @@ const IncidentList = () => {
         </Box>
         <Box sx={{display: 'flex' ,width: "100%"}}>
             <Typography sx={{justifyContent: true, flex: 1, textAlign: "center"}}>If you have spotted illegal activities in your vicinity, please file a report here to us!</Typography>
+        </Box>
+        <Box sx={{display: 'flex' ,width: "100%"}}>
+            <Typography sx={{justifyContent: true, flex: 1, textAlign: "center"}}>Click + near Title to create new incident report. On existing incidents, click trash icon to delete and pencil icon to edit.</Typography>
         </Box>
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">

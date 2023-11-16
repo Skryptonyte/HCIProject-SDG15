@@ -92,19 +92,23 @@ const CommentEntry = ({...props}) => {
 const NewsSinglePage = () => {
     let { id } = useParams();
     const [comment, setComment] = React.useState("")
-    const [comments, setComments] = React.useState([])
+    const identifier = "comments-"+id
+    const commentData = localStorage.getItem(identifier)
+    const [comments, setComments] = React.useState(commentData ? JSON.parse(commentData): [])
     const submitComment = () => {
-        setComments([...comments, {id:comments.length+1, author: localStorage.getItem("login"), comment: comment}])
+        const newComments = [...comments, {id:comments.length+1, author: localStorage.getItem("login"), comment: comment}]
+        localStorage.setItem(identifier, JSON.stringify(newComments))
+        setComments(newComments)
         setComment("")
     }
 
 
     const deleteFunc = (id) => {
-        setComments(current =>
-            comments.filter((c) => {
-              return c.id !== id;
-            }),
-          );
+        const newComments = comments.filter((c) => {
+            return c.id !== id;
+          })
+        localStorage.setItem(identifier, JSON.stringify(newComments))
+        setComments(newComments);
     }
     return (
         <>
