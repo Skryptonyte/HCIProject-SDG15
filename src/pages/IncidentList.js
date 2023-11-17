@@ -91,7 +91,7 @@ const IncidentList = () => {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
-    var userName = localStorage.getItem("user")
+    var userName = localStorage.getItem("login")
     var identifier = "incidents-"+userName
     var stored = localStorage.getItem(identifier)
     const [rows, setRows] = React.useState(stored ? JSON.parse(stored):  [])

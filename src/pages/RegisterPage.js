@@ -47,6 +47,10 @@ const RegisterPage = () => {
             setConfirmPasswordHelper("Passwords do not match!")
             return;
         }
+        const userTable = localStorage.getItem("users") ? JSON.parse(localStorage.getItem("users")): {}
+        userTable[username] = password
+        localStorage.setItem("users",JSON.stringify(userTable))
+
         setRegisterSuccess(true)
         const timer = setTimeout(() => {
             navigate("/login")

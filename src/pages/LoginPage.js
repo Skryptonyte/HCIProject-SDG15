@@ -27,13 +27,13 @@ const LoginPage = () => {
         if (!pass){
             return
         }
-
-        if (!(email == "Test User" && password == "testtest"))
+        const users = localStorage.getItem("users") ? JSON.parse(localStorage.getItem("users")): []
+        if (!(users[email] && users[email] == password))
         {
             setPasswordHelper("Incorrect username or password!")
             return
         }
-        localStorage.setItem("login","Test User")
+        localStorage.setItem("login",email)
         navigate("/")
         navigate(0)
         return 

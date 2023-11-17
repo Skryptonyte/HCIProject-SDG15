@@ -57,7 +57,7 @@ const modalStyle = {
     };
 
 const CommentEntry = ({...props}) => {
-
+    const currentLogin = localStorage.getItem("login")
     const delFunc = () => {
         props.delete(props.comment.id)
     }
@@ -70,7 +70,7 @@ const CommentEntry = ({...props}) => {
 
             <Typography variant="subtitle2"><Person2Rounded/>{props.comment?.author}</Typography>
             <Typography variant="h6">{props.comment?.comment}</Typography>
-            <Button color="error" onClick={handleOpen}>Delete</Button>
+            {currentLogin == props.comment?.author && <Button color="error" onClick={handleOpen}>Delete</Button>}
             <Divider />
             <Modal
                 open={open}
